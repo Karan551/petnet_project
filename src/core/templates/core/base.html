@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}
+
+      {% endblock %} | Petnet
+    </title>
+    <link rel="stylesheet" href="{% static 'css/custom_output/output.css' %}" />
+  </head>
+  <body>
+  
+      {% include "core/navbar.html" %}
+
+      <div id="msg-container" class="p-6" >
+      {% if messages %}
+        {% for message in messages %}
+          <div class="{% if message.tags == 'success' %}
+               bg-teal-500
+            {% else %}
+               bg-red-500
+            {% endif %} px-4 py-3 font-semibold text-center md:text-xl text-lg rounded-xl my-2 text-white">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <main class="p-6" >
+      {% block content %}
+        Replace this content
+      {% endblock %}
+    </main>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block js %}
+
+    {% endblock %}
+  </body>
+</html>
