@@ -1,11 +1,12 @@
-{% extends 'core/base.html' %} 
+{% extends 'core/base.html' %}
 {% block title %}
   {{ category.name|title }}
 {% endblock %}
-
-
- {% block content %}
-<section>
-    <h1 class="text-2xl" >{{category.name|title}}</h1>
-</section>
- {% endblock content %}
+{% block content %}
+  <section class="bg-slate-100 px-8 py-4 rounded-xl w-4/5 mx-auto">
+    <h1 class="text-2xl text-center">{{ category.name|title }}</h1>
+    <div class="w-full">
+      {% include 'store/product.html' %}
+    </div>
+  </section>
+{% endblock %}
