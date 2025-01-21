@@ -1,0 +1,11 @@
+{% extends 'core/base.html' %} 
+{% block title %}
+  {{ category.name|title }}
+{% endblock %}
+
+
+ {% block content %}
+<section>
+    <h1 class="text-2xl" >{{category.name|title}}</h1>
+</section>
+ {% endblock content %}
