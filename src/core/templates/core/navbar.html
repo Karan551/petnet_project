@@ -1,21 +1,29 @@
 <nav class="flex justify-between items-center p-4 bg-teal-500 text-white">
-  <div id="logo" class="text-3xl px-4 py-2 hover:text-gray-500 font-semibold hover:cursor-pointer">
-    <a href="{% url 'core:home' %}">Petnet</a>
+  <div id="logo" class="text-3xl px-4 py-2  font-semibold hover:cursor-pointer">
+    <a href="{% url 'core:home' %}" class="inline-block">Petnet</a>
+    <form class="inline-block"
+    action="{% url 'store:search' %}"
+    >
+      <input type="search" 
+      name="query" 
+      class="px-4 py-2 text-black rounded-xl mx-2 inline-block text-2xl font-semibold"
+      required
+      id="product_search"
+      placeholder="Search Product Here....." />
+     
+      <button class="px-6 py-3 rounded-xl text-white text-xl font-semibold inline-block bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 outline-none hover:ring-1 hover:bg-gradient-to-l active:shadow-2xl active-btn">Search</button>
+    </form>
   </div>
 
-
-
   <div class="flex space-x-4">
-    <div class="space-x-4 flex items-center" >
+    <div class="space-x-4 flex items-center">
       {% load menu %}
-        {% menu %}
-      </div>
+      {% menu %}
+    </div>
     <ul>
       <li class="text-xl md:text-2xl font-semibold hover:text-gray-400 hover:cursor-pointer bg-slate-500 px-8 py-4 rounded-xl text-center">
-        
         <a href="{% url 'core:about' %}">About</a>
       </li>
     </ul>
   </div>
-  
 </nav>

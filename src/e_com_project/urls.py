@@ -31,3 +31,5 @@ if settings.DEBUG:
                           document_root=settings.STATIC_ROOT)
 
     # Here I have to add media storage files
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %} 
+{% block title %} {{ category.name|title }}
+
+ {% endblock %} {% block content %}
+<section class="bg-gray-200 rounded-xl p-5">
+  <h1 class="text-center px-4 text-4xl text-blue-500 font-semibold">
+    Search Results For : {{ query|title }}
+  </h1>
+  {% if products %}
+  <div class="w-full">{% include 'store/product.html' %}</div>
+  {% else %}
+  <div
+    class="text-lg md:text-2xl font-semibold px-6 py-4 bg-rose-500/90 text-white rounded-xl my-4 w-1/2 mx-auto space-x-6 flex"
+  >
+  <div>
+    Sorry
+    <span class="text-gray-800">{{ query|title }}</span> 
+    Not found.
+</div>
+    <p>Back To
+    <a href="{% url 'core:home' %}" class="text-blue-500/90 hover:text-blue-700 hover:underline">
+      Home</a
+    >
+</p>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

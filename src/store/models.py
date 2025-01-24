@@ -26,7 +26,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     slug = models.SlugField(max_length=255)
 
-    # image
+    image = models.ImageField(upload_to="uploads", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
