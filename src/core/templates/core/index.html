@@ -2,5 +2,15 @@
   Home
 {% endblock %}
 {% block content %}
+<section>
 {% include "store/product.html" %}
+
+<div class="flex flex-col space-y-4 bg-gray-300 rounded-lg p-6">
+  <h2 class="text-center font-semibold text-lg md:text-3xl" >Categories</h2>
+  <div class=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">
+    
+    {% load menu %}
+    {% menu %}
+  </div>
+</section>
 {% endblock %}

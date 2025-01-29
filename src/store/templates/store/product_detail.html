@@ -1,9 +1,6 @@
-{% extends 'core/base.html' %}
-{% block title %}
+{% extends 'core/base.html' %} {% block title %}
   {{ product.name|title }}
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
   <section class="bg-gray-200 rounded-lg px-6 py-4 grid grid-cols-5 w-full gap-2">
     {% if product.image %}
       <div class="col-span-5 md:col-span-3 px-4 py-2">
@@ -14,12 +11,19 @@
       <h1 class="text-4xl text-blue-500 hover:text-blue-600 hover:cursor-pointer">{{ product.name }}</h1>
 
       <p class="text-lg my-2 mb-4">
-        Price : <span class="text-gray-400 hover:text-gray-200 cursor-pointer">&dollar; {{ product.get_display_price }}</span>
+        Price :
+        <span class="text-gray-400 hover:text-gray-200 cursor-pointer">&dollar; {{ product.get_display_price }}</span>
+      </p>
+      <p class="text-sm text-gray-500 mb-4">
+        &dollar; {{ product.get_display_price }} - 
+        <a href="{% url 'userprofile:vender_detail' product.vendor.id %}" 
+        class="hover:underline font-semibold text-blue-500 hover:text-blue-700">
+          {% firstof  product.vendor.get_full_name|title  product.vendor.username|title  %}</a>
       </p>
 
       {% if product.description %}
-        <div class="my-4 mb-2" >
-         <span class="text-2xl text-white p-4 rounded-xl bg-orange-500 hover:bg-orange-700 hover:text-white"> Description :- </span><br />
+        <div class="mt-6 mb-2">
+          <span class="text-2xl text-white p-4 rounded-xl bg-orange-500 hover:bg-orange-700 hover:text-white">Description :-</span><br />
           <p class="mt-4 text-lg md:text-xl text-black">{{ product.description }}</p>
         </div>
       {% endif %}

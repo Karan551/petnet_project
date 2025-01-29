@@ -4,9 +4,11 @@
 
 
 /* ------------- custom css --------------- */
-.active-btn{
-    box-shadow: 8px 15px gray;
+.active-btn {
+    box-shadow: 3px 5px rgba(245, 245, 245,0.75);
+    
 }
-.active-btn:active{
-    box-shadow: 4px 8px 10px rebeccapurple;
+
+.active-btn:active {
+    box-shadow: 4px 8px rebeccapurple;
 }

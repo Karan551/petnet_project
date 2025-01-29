@@ -1,29 +1,35 @@
-<nav class="flex justify-between items-center p-4 bg-teal-500 text-white">
-  <div id="logo" class="text-3xl px-4 py-2  font-semibold hover:cursor-pointer">
-    <a href="{% url 'core:home' %}" class="inline-block">Petnet</a>
-    <form class="inline-block"
-    action="{% url 'store:search' %}"
-    >
-      <input type="search" 
-      name="query" 
-      class="px-4 py-2 text-black rounded-xl mx-2 inline-block text-2xl font-semibold"
-      required
-      id="product_search"
-      placeholder="Search Product Here....." />
-     
-      <button class="px-6 py-3 rounded-xl text-white text-xl font-semibold inline-block bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 outline-none hover:ring-1 hover:bg-gradient-to-l active:shadow-2xl active-btn">Search</button>
-    </form>
-  </div>
+<nav class="bg-gray-300 w-full">
+  <div class="w-full max-w-screen-xl flex flex-wrap justify-between items-center mx-auto p-4">
+    <div id="logo" class="text-3xl px-4 py-2 font-semibold hover:cursor-pointer">
+      <a href="{% url 'core:home' %}" class="inline-block">Petnet</a>
+      <form class="inline-block" action="{% url 'store:search' %}">
+        <input type="search" name="query" class="px-4 py-2 text-black rounded-xl mx-2 inline-block text-2xl font-semibold outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-gray-300/80" required id="product_search" placeholder="Search Product Here....." />
 
-  <div class="flex space-x-4">
-    <div class="space-x-4 flex items-center">
-      {% load menu %}
-      {% menu %}
+        <button class="px-4 md:px-6 py-3 rounded-xl text-white text-xl font-semibold inline-block bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 outline-none hover:ring-1 hover:bg-gradient-to-l active:shadow-2xl active-btn">Search</button>
+      </form>
     </div>
-    <ul>
-      <li class="text-xl md:text-2xl font-semibold hover:text-gray-400 hover:cursor-pointer bg-slate-500 px-8 py-4 rounded-xl text-center">
-        <a href="{% url 'core:about' %}">About</a>
-      </li>
+
+    <ul class="flex space-x-4">
+      {% if request.user.is_authenticated %}
+        <li class="text-xl md:text-2xl font-semibold hover:cursor-pointer bg-teal-500 px-2 md:px-6 py-4 rounded-xl text-center hover:bg-teal-600 text-white">
+          <a href="{% url 'userprofile:my_account' %}">My Account</a>
+        </li>
+
+        <li class="text-xl md:text-2xl font-semibold hover:cursor-pointer bg-red-500 px-2 md:px-6 py-4 rounded-xl text-center hover:bg-red-600 text-white">
+          <form action="{% url 'userprofile:logout' %}" class="prompt-user" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+          </form>
+        </li>
+      {% else %}
+        <li class="text-xl md:text-2xl font-semibold hover:cursor-pointer bg-teal-500 px-2 md:px-6 py-4 rounded-xl text-center hover:bg-teal-600 text-white">
+          <a href="{% url 'userprofile:signup' %}">Signup</a>
+        </li>
+
+        <li class="text-xl md:text-2xl font-semibold hover:cursor-pointer bg-gray-400 px-2 md:px-6 py-4 rounded-xl text-center hover:bg-zinc-600 text-white">
+          <a href="{% url 'userprofile:login' %}">Login</a>
+        </li>
+      {% endif %}
     </ul>
   </div>
 </nav>
