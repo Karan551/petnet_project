@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+
+  {% block title %}My Store {% endblock %}
+
+{% block content %}
+<section class="bg-slate-100 px-8 py-4 rounded-xl w-4/5 mx-auto">
+
+
+<div class="w-full  mb-6 relative">
+    <h1 class="text-3xl leading-none text-center">
+        My Store
+    </h1>
+
+    <a href="{% url 'store:add_product' %}" class="inline-block py-4 px-8 bg-teal-500 text-white rounded-xl font-semibold text-lg md:text-xl hover:bg-teal-700 absolute h -top-1 right-4">Add Product</a>
+
+
+
+</div>
+{% if products %}
+    
+{% include "store/product.html" %}
+{% else %}
+<p class="mt-4 py-4 px-8 bg-gray-200">You don't have any products yet...</p>
+{% endif %}
+</section>
+{% endblock content %}

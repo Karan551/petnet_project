@@ -5,8 +5,8 @@ from store.models import Product
 
 
 def home_page_view(request):
-    products = Product.objects.all()[:6]
-    
+    products = Product.objects.filter(status=Product.ACTIVE)[:6]
+
     context = {
         "products": products
     }

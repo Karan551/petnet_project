@@ -21,7 +21,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-@k!y+3059$61@i91rc#s05bp(mr%-w5p=27-obm&dhzd3w@k5+'
 
 SECRET_KEY = config("DJANGO_SECRET_KEY", cast=str)
 
@@ -70,6 +69,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
+                # custom context processor
+                'store.context_processor.count_active_products'
             ],
         },
     },
@@ -119,6 +121,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGIN_URL = "userprofile:login"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

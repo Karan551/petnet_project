@@ -5,9 +5,6 @@ const initApp = () => {
     // ---------- To show copyright year
     const currentYear = new Date().getFullYear();
 
-    // console.log("this is current year::", currentYear);
-    // console.log("this is current year::", String((currentYear+1)).slice(-2));
-
     const year = document.querySelector("#copyright-year");
     year.innerHTML = currentYear + "-" + String((currentYear + 1)).slice(-2);
 
@@ -24,6 +21,25 @@ const initApp = () => {
             });
 
         });
+    }
+
+    // ------------------- To delete product
+    function handleForm(formElement, label) {
+
+        formElement.addEventListener("submit", function (event) {
+            const prompt = confirm(`Are you sure to ${label} this product?`);
+            if (!prompt) {
+                event.preventDefault();
+            }
+
+        });
+
+    }
+    const deleteForm = document.querySelector("#delete-prod-form") || null;
+
+    if (deleteForm) {
+
+        handleForm(deleteForm, "delete");
     }
 
 

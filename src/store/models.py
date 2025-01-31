@@ -15,6 +15,18 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    ACTIVE = "active"
+    DELETE = "delete"
+    DRAFT = "draft"
+    WAITING_FOR_APPROVAL = "waiting_approval"
+
+    STATUS_CHOICES = [
+        (ACTIVE, "active"),
+        (DELETE, "delete"),
+        (DRAFT, "draft"),
+        (WAITING_FOR_APPROVAL, "waiting_approval"),
+
+    ]
     vendor = models.ForeignKey(
         User, related_name="products", on_delete=models.CASCADE)
 
@@ -27,6 +39,9 @@ class Product(models.Model):
     slug = models.SlugField(max_length=255)
 
     image = models.ImageField(upload_to="uploads", blank=True, null=True)
+    status = models.CharField(
+        max_length=50, choices=STATUS_CHOICES, default=ACTIVE)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

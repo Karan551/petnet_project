@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from .models import UserProfile
 from django.contrib.auth.models import User
+from store.models import Product
 
 # Create your views here.
 
@@ -71,5 +72,14 @@ def vender_detail(request, user_id):
 
     return render(request, "userprofile/vendor_detail.html", context)
 
+
 def my_account(request):
-    return render(request,"userprofile/account.html")
+    return render(request, "userprofile/account.html")
+
+
+def my_store(request):
+    products = request.user.products.filter(status=Product.ACTIVE)
+    context={
+        "products":products
+    }
+    return render(request, "userprofile/my_store.html",context)

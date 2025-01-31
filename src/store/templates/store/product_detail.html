@@ -6,6 +6,10 @@
       <div class="col-span-5 md:col-span-3 px-4 py-2">
         <img src="{{ product.image.url }}" alt="{{ product.name }}" class="rounded-lg mb-4" />
       </div>
+    {% else %}
+      <div class="col-span-5 md:col-span-3 px-4 py-2">
+        <img src="https://placehold.co/600x400?text=Image+Not+Available" alt="{{ product.name }}" class="rounded-lg mb-4" />
+      </div>
     {% endif %}
     <div class="col-span-5 md:col-span-2 bg-white rounded-xl p-6">
       <h1 class="text-4xl text-blue-500 hover:text-blue-600 hover:cursor-pointer">{{ product.name }}</h1>
@@ -15,16 +19,25 @@
         <span class="text-gray-400 hover:text-gray-200 cursor-pointer">&dollar; {{ product.get_display_price }}</span>
       </p>
       <p class="text-sm text-gray-500 mb-4">
-        &dollar; {{ product.get_display_price }} - 
-        <a href="{% url 'userprofile:vender_detail' product.vendor.id %}" 
-        class="hover:underline font-semibold text-blue-500 hover:text-blue-700">
-          {% firstof  product.vendor.get_full_name|title  product.vendor.username|title  %}</a>
+        &dollar; {{ product.get_display_price }} -
+        <a href="{% url 'userprofile:vender_detail' product.vendor.id %}" class="hover:underline font-semibold text-blue-500 hover:text-blue-700">{% firstof product.vendor.get_full_name|title product.vendor.username|title %}</a>
       </p>
 
       {% if product.description %}
         <div class="mt-6 mb-2">
-          <span class="text-2xl text-white p-4 rounded-xl bg-orange-500 hover:bg-orange-700 hover:text-white">Description :-</span><br />
-          <p class="mt-4 text-lg md:text-xl text-black">{{ product.description }}</p>
+          <span class="text-lg md:text-2xl text-white p-4 rounded-xl bg-orange-500 hover:bg-orange-700 hover:text-white">Description :-</span><br />
+          <p class="mt-4 text-base md:text-lg text-black">{{ product.description }}</p>
+        </div>
+      {% endif %} {% if request.user.is_authenticated and product.vendor == request.user %}
+        <div class="space-x-4 flex flex-col w-full items-center bg-gray-200 px-6 py-4 rounded-xl space-y-3">
+          <p class="text-black/50">This is your product.</p>
+          <div class="md:space-x-4 space-y-4 ">
+            <a href="{% url 'store:edit_product' product.id %}" class="inline-block bg-yellow-500 px-8 py-4 rounded-xl text-base md:text-xl text-white font-semibold hover:bg-yellow-700 cursor-pointer">Edit</a>
+            <form class="inline-block" id="delete-prod-form" action="{% url 'store:delete_product' product.id %}" method="post">
+              {% csrf_token %}
+              <button class="inline-block bg-red-500 px-8 py-4 rounded-xl text-base md:text-xl text-white font-semibold hover:bg-red-700 cursor-pointer">Delete</button>
+            </form>
+          </div>
         </div>
       {% endif %}
     </div>

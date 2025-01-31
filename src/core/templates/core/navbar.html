@@ -15,6 +15,10 @@
           <a href="{% url 'userprofile:my_account' %}">My Account</a>
         </li>
 
+        <li class="text-xl md:text-2xl font-semibold hover:cursor-pointer bg-teal-500 px-2 md:px-6 py-4 rounded-xl text-center hover:bg-teal-600 text-white">
+          <a href="{% url 'userprofile:my_store' %}">My Store</a>
+        </li>
+
         <li class="text-xl md:text-2xl font-semibold hover:cursor-pointer bg-red-500 px-2 md:px-6 py-4 rounded-xl text-center hover:bg-red-600 text-white">
           <form action="{% url 'userprofile:logout' %}" class="prompt-user" method="post">
             {% csrf_token %}
