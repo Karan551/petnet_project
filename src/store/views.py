@@ -6,6 +6,7 @@ from .forms import ProductForm
 from django.utils.text import slugify
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .cart import Cart
 # Create your views here.
 
 
@@ -22,12 +23,15 @@ def product_search(request):
         return render(request, "store/search.html", context)
 
 # TODO: show product items number in templates
+
+
 def category_detail(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     products = category.catgory_products.filter(status=Product.ACTIVE)
-    count=category.catgory_products.filter(status=Product.ACTIVE).count()
-    
-    print(f"this is total products in {category} :", category.catgory_products.filter(status=Product.ACTIVE).count())
+    count = category.catgory_products.filter(status=Product.ACTIVE).count()
+
+    print(f"this is total products in {category} :", category.catgory_products.filter(
+        status=Product.ACTIVE).count())
     # print("this is products:", products)
 
     context = {
@@ -38,7 +42,7 @@ def category_detail(request, category_id):
 
 
 def product_detail(request, product_id):
-    product = get_object_or_404(Product, id=product_id,status=Product.ACTIVE)
+    product = get_object_or_404(Product, id=product_id, status=Product.ACTIVE)
 
     context = {
         "product": product
@@ -107,3 +111,30 @@ def delete_product(request, product_id):
 
         messages.success(request, "Product Deleted Successfully.")
         return redirect("userprofile:my_store")
+
+
+def add_to_cart(request, product_id):
+    cart = Cart(request)
+
+    cart.add(product_id)
+
+    return redirect("store:cart_view")
+
+
+def cart_view(request):
+    cart = Cart(request)
+    
+    context = {
+        "cart": cart
+    }
+    return render(request, "store/cart_view.html", context)
+
+
+def remove_to_cart(request, product_id):
+    print("this is product id",product_id)
+    cart = Cart(request)
+    cart.remove(product_id)
+    messages.success(request,"Item removed from cart")
+    
+    return redirect("store:cart_view")
+   

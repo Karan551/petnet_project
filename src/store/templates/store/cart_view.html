@@ -1,0 +1,57 @@
+{% extends 'core/base.html' %} 
+{% block title %}
+Cart
+{% endblock %}
+ {% block content %}
+ <section class="bg-slate-100 px-8 py-4 rounded-xl w-4/5 mx-auto" >
+ <h1 class="text-lg md:text-2xl mb-2 mt-3 text-center">Cart</h1>
+{% if cart %}
+
+ <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-2">
+    <table class="w-full  text-left rtl:text-right  dark:text-blue-100">
+        <thead class="text-lg text-black uppercase bg-gray-500 dark:text-white">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Product name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Product Price
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Action
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            <tr class="bg-gray-300 border-b border-gray-800">
+               
+                <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap text-black">
+                    {{item.product.name}}
+                </th>
+                <td class="px-6 py-4 text-black">
+                    {{item.total_price}} &dollar;
+                </td>
+                
+                
+                <td class="px-6 py-4">
+                    <a href="{% url 'store:remove_to_cart' item.product.id %}" class="font-semibold text-red-500 hover:underline">Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr class="text-black" >
+                <th scope="row" class="px-6 py-4  whitespace-nowrap text-black text-lg font-semibold">Total Cost  </th>
+                <td class="px-6 py-4 text-black">{{cart.get_total_cost}} &dollar;</td>
+                <td class="px-6 py-4"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+ {% else %}
+ <p class="text-lg md:text-xl p-6 font-semibold bg-gray-400 rounded-xl text-white my-4" >Your Cart is empty. Please add item in your cart.</p>
+ {% endif %}
+</section>
+ {% endblock content %}
