@@ -15,7 +15,7 @@ class Cart:
         self.qty = 0
 
     def __iter__(self):
-        
+        print('this is self.cart',self.cart)
         # To add product id and product information in cart
         for key in self.cart.keys():
             print('this is key::', key)

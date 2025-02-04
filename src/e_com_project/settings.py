@@ -71,7 +71,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 # custom context processor
-                'store.context_processor.count_active_products'
+                'store.context_processor.cart'
             ],
         },
     },

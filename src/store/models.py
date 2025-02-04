@@ -83,7 +83,37 @@ class Product(models.Model):
                 self.save()
 
                 return self.thumbnail.url
-           
 
             else:
                 return "https://placehold.co/600x400?text=Image+Not+Available"
+
+
+class Order(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    contact_number = models.CharField(max_length=255)
+    email_address = models.EmailField(max_length=255)
+    city = models.CharField(max_length=255)
+    zipcode = models.CharField(max_length=100)
+    address = models.CharField(max_length=300)
+    paid_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    is_paid = models.BooleanField(default=False)
+    merchant_id = models.CharField(max_length=100)
+    created_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name="orders")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class OrderItems(models.Model):
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="items")
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name="orders")
+
+    price = models.DecimalField(decimal_places=2, max_digits=8)
+    quantity = models.IntegerField(default=1)
+    
+    class Meta:
+        verbose_name_plural="Order Items"

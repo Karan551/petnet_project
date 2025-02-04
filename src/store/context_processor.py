@@ -1,6 +1,6 @@
-from store.models import Category, Product
+from .cart import Cart
 
 
-def count_active_products(request):
-    # print("this is category::",category)
-    return {"count_items": "Heere"}
+def cart(request):
+    cart = Cart(request)
+    return {"cart": cart}

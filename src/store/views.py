@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from store.models import Product, Category
+from store.models import Product, Category, OrderItems
 from django.db.models import Q
-from .forms import ProductForm
+from .forms import ProductForm, OrderForm
 from django.utils.text import slugify
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -123,7 +123,7 @@ def add_to_cart(request, product_id):
 
 def cart_view(request):
     cart = Cart(request)
-    
+    print('this is cart length::', len(cart))
     context = {
         "cart": cart
     }
@@ -145,3 +145,43 @@ def change_quantity(request, product_id):
     if quantity:
         cart.add(product_id, quantity, update_quantity=True)
     return redirect("store:cart_view")
+
+@login_required
+def checkout(request):
+
+    # price,user
+    cart = Cart(request)
+    # print("this is cart value::", cart.__dict__)
+    
+    # print("total price is ::", cart.get_total_cost())
+
+    if request.method == "POST":
+
+        form = OrderForm(request.POST)
+
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.created_by = request.user
+            order.paid_amount = cart.get_total_cost()
+            order.save()
+
+            for item in cart:
+                product = item["product"]
+                quantity = item["quantity"]
+                total_price = quantity * product.price
+                
+
+                item = OrderItems.objects.create(
+                    product=product, order=order, price=total_price, quantity=quantity)
+                
+                
+                cart.clear()
+
+                messages.success(request,"Order Placed Successfully.")
+                return redirect("userprofile:my_account")
+
+    form = OrderForm()
+    context = {
+        "form": form
+    }
+    return render(request, "store/checkout.html", context)
