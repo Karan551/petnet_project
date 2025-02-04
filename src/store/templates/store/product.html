@@ -1,20 +1,21 @@
 <section class="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
     {% for product in products %}
       <div class=" transition-transform duration-300 hover:scale-105 hover:border hover:border-black rounded-lg" >
-        <div class="bg-gray-300 px-4 py-2 rounded-lg">
+        <div class="rounded-lg">
           <a href="{% url 'store:product_detail' product.id %}"
           
           >
             
             {% if product.image %}
             <div>
-              <img src="{{product.image.url}}" alt="{{product.name}}" class="rounded-lg mb-4 ">
+              <img src="{{product.get_thumbnail}}" alt="{{product.name}}" class="rounded-t-xl mbb-4 w-full h-auto object-cover ">
             </div>
             
             {% endif %}
-            
+            <div class="p-4 bg-gray-200 rounded-b-xl" >
             <h2 class="text-lg md:text-xl font-semibold">{{ product.name }}</h2>
             <p class="text-gray-500">Price :- &dollar; {{ product.get_display_price }}</p>
+            </div>
           </a>
         </div>
       </div>

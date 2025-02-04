@@ -123,7 +123,9 @@ def add_to_cart(request, product_id):
 
 def cart_view(request):
     cart = Cart(request)
-    
+    print('this is cart value:::',cart)
+    # print(cart.clear())
+
     context = {
         "cart": cart
     }
@@ -131,10 +133,17 @@ def cart_view(request):
 
 
 def remove_to_cart(request, product_id):
-    print("this is product id",product_id)
+    print("this is product id", product_id)
     cart = Cart(request)
     cart.remove(product_id)
-    messages.success(request,"Item removed from cart")
-    
+    messages.success(request, "Item removed from cart")
+
     return redirect("store:cart_view")
-   
+
+
+def change_quantity(request, product_id):
+    quantity = request.GET.get("quantity", "")
+    cart = Cart(request)
+    if quantity:
+        cart.add(product_id, quantity, update_quantity=True)
+    return redirect("store:cart_view")

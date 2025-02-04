@@ -5,14 +5,18 @@ Cart
  {% block content %}
  <section class="bg-slate-100 px-8 py-4 rounded-xl w-4/5 mx-auto" >
  <h1 class="text-lg md:text-2xl mb-2 mt-3 text-center">Cart</h1>
-{% if cart %}
+
+ {% if cart %}
 
  <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-2">
     <table class="w-full  text-left rtl:text-right  dark:text-blue-100">
-        <thead class="text-lg text-black uppercase bg-gray-500 dark:text-white">
+        <thead class="text-lg text-white uppercase bg-gray-500 dark:text-white">
             <tr>
                 <th scope="col" class="px-6 py-3">
                     Product name
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Quantity
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Product Price
@@ -25,11 +29,22 @@ Cart
         </thead>
         <tbody>
             {% for item in cart %}
-            <tr class="bg-gray-300 border-b border-gray-800">
+            <tr class="odd:bg-gray-100 odd:dark:bg-gray-900 even:bg-gray-300 even:dark:bg-gray-800 border-b border-gray-800">
                
                 <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap text-black">
                     {{item.product.name}}
                 </th>
+                <td class="px-6 py-4 text-black flex items-center space-x-2 justify-center">
+                    <a class="flex justify-center items-center text-center text-white w-[40px] h-auto text-lg bg-red-500 rounded-xl py-2 hover:bg-red-700" href="{% url 'store:change_quantity' item.product.id %}?quantity=-1" >
+
+                        <i class="fa-solid fa-minus"></i> 
+                    </a>
+                    
+                    <input type="text" class="w-[50px] h-[40px] text-xl text-center px-4 py-1 outline-none border-none rounded-xl bg-sky-400" value="{{item.quantity}}" readonly>
+                    <a href="{% url 'store:change_quantity' item.product.id %}?quantity=1"
+                    class="flex justify-center items-center text-center w-[40px] text-lg bg-teal-600 rounded-xl py-2 hover:bg-teal-800 text-white"
+                    ><i class="fa-solid fa-plus"></i></a>
+                </td>
                 <td class="px-6 py-4 text-black">
                     {{item.total_price}} &dollar;
                 </td>
@@ -40,8 +55,9 @@ Cart
                 </td>
             </tr>
             {% endfor %}
-            <tr class="text-black" >
-                <th scope="row" class="px-6 py-4  whitespace-nowrap text-black text-lg font-semibold">Total Cost  </th>
+            <tr class="text-black bg-teal-400/80" >
+                <th scope="row" class="px-6 py-4  whitespace-nowrap  text-black text-lg md:text-xl font-semibold ">Total </th>
+                <td class="px-6 py-4 text-black text-center text-lg font-semibold">{{cart.get_total_quantity}}</td>
                 <td class="px-6 py-4 text-black">{{cart.get_total_cost}} &dollar;</td>
                 <td class="px-6 py-4"></td>
             </tr>

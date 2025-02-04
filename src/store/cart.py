@@ -12,6 +12,7 @@ class Cart:
             cart = self.session[settings.CART_SESSION_ID] = {}
 
         self.cart = cart
+        self.qty = 0
 
     def __iter__(self):
         print('this is self.cart', self.cart)
@@ -40,7 +41,6 @@ class Cart:
 
     def add(self, product_id, quantity=1, update_quantity=False):
         quantity = int(quantity)
-
         # 'cart': {'5': {'id': 5, 'quantity': 1} }
 
         # first time when we add product in cart.
@@ -52,12 +52,12 @@ class Cart:
 
             if self.cart[product_id]["quantity"] == 0:
                 self.remove(product_id)
-
+        print("this is updated cart value::", self.cart)
         self.save()
 
     def remove(self, product_id):
         product_id = str(product_id)
-        
+
         if product_id in self.cart:
             del self.cart[product_id]
 
@@ -73,3 +73,8 @@ class Cart:
             self.cart[p]['product'] = Product.objects.get(pk=p)
 
         return sum(item['quantity'] * item['product'].price for item in self.cart.values())/100
+
+    def get_total_quantity(self):
+        for item in self.cart.keys():
+            self.qty += self.cart[item]['quantity']
+        return self.qty
