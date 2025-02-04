@@ -123,9 +123,7 @@ def add_to_cart(request, product_id):
 
 def cart_view(request):
     cart = Cart(request)
-    print('this is cart value:::',cart)
-    # print(cart.clear())
-
+    
     context = {
         "cart": cart
     }

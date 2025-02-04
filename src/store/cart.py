@@ -15,7 +15,7 @@ class Cart:
         self.qty = 0
 
     def __iter__(self):
-        print('this is self.cart', self.cart)
+        
         # To add product id and product information in cart
         for key in self.cart.keys():
             print('this is key::', key)
@@ -52,7 +52,7 @@ class Cart:
 
             if self.cart[product_id]["quantity"] == 0:
                 self.remove(product_id)
-        print("this is updated cart value::", self.cart)
+        
         self.save()
 
     def remove(self, product_id):
