@@ -79,6 +79,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'e_com_project.wsgi.application'
 
+WEBSITE_URL = config("WEBSITE_URL", cast=str)
+
+STRIPE_PUB_KEY = config("STRIPE_PUB_KEY")
+STRIPE_SECRET_KEY = config("STRIPE_SECRET_KEY", cast=str)
+
+EMAIL_BACKEND = config("EMAIL_BACKEND", cast=str)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool)
+EMAIL_HOST = config("EMAIL_HOST", cast=str)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", cast=str)
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", cast=str)
+EMAIL_PORT = config("EMAIL_PORT", cast=str)
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -115,7 +127,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 

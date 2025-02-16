@@ -1,12 +1,17 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from store.models import Product, Category, OrderItems
+from store.models import Product, Category, OrderItems, Order
 from django.db.models import Q
 from .forms import ProductForm, OrderForm
 from django.utils.text import slugify
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .cart import Cart
+from django.http import JsonResponse, HttpResponseRedirect
+from django.conf import settings
+import stripe
+import json
+from .utils import product_sales
 # Create your views here.
 
 
@@ -146,42 +151,91 @@ def change_quantity(request, product_id):
         cart.add(product_id, quantity, update_quantity=True)
     return redirect("store:cart_view")
 
+
 @login_required
 def checkout(request):
 
-    # price,user
     cart = Cart(request)
-    # print("this is cart value::", cart.__dict__)
-    
-    # print("total price is ::", cart.get_total_cost())
+    print('this is cart length::', len(cart))
+
+    if len(cart) == 0:
+        return redirect("store:cart_view")
 
     if request.method == "POST":
-
         form = OrderForm(request.POST)
 
+        # TODO: fix payment intent issue
         if form.is_valid():
-            order = form.save(commit=False)
-            order.created_by = request.user
-            order.paid_amount = cart.get_total_cost()
-            order.save()
 
+            items = {}
+            products = []
             for item in cart:
                 product = item["product"]
-                quantity = item["quantity"]
-                total_price = quantity * product.price
-                
 
-                item = OrderItems.objects.create(
-                    product=product, order=order, price=total_price, quantity=quantity)
-                
-                
-                cart.clear()
+                products.append({
+                    "product_name": product.name,
+                    "price": item["quantity"]*product.price,
+                    "quantity": item["quantity"]
+                })
 
-                messages.success(request,"Order Placed Successfully.")
-                return redirect("userprofile:my_account")
+            checkout_session = product_sales(products)
+
+            items["checkout_url"] = checkout_session.url
+            items["payment_intent"] = checkout_session.payment_intent
+
+            # TODO: come again
+            request.session["purchase_id"] = json.dumps(checkout_session.id)
+            print('this is sesssion:',request.session)
+            if request.session["purchase_id"]:
+                order = form.save(commit=False)
+                order.created_by = request.user
+                order.paid_amount = cart.get_total_cost()
+                # order.is_paid = True
+                order.payment_intent = items["payment_intent"] or checkout_session.id
+                
+                order.save()
+
+         
+                # del request.session["purchase_id"]
+                for item in cart:
+                    product = item["product"]
+                    quantity = item["quantity"]
+                    total_price = quantity * product.price
+
+                    item = OrderItems.objects.create(
+                        product=product, order=order, price=total_price, quantity=quantity)
+
+                    # cart.clear()
+
+                    # messages.success(request, "Order Placed Successfully.")
+        # return redirect("userprofile:my_account")
+        # return JsonResponse({"msg": "hello"})
+        # session, payment_intent = items
+        # url = items["checkout_url"]
+            return HttpResponseRedirect(checkout_session.url)
+        # return JsonResponse({"session": session, "order": payment_intent})
 
     form = OrderForm()
     context = {
-        "form": form
+        "form": form,
+        "pub_key": settings.STRIPE_PUB_KEY
     }
     return render(request, "store/checkout.html", context)
+
+@login_required
+def success(request):
+    cart=Cart(request)
+    purchase_id = request.session.get("purchase_id")
+    print('this is id ',request.session['purchase_id'])
+    print('this is request.session',request.session.__dict__)
+    print("this is purchase id::",purchase_id)
+    order = Order.objects.get(payment_intent=purchase_id)
+    if purchase_id:
+        order.is_paid = True
+        order.save()
+        messages.success(request, "Order Placed Successfully.")
+        del request.session["purchase_id"]
+        # cart.clear()
+        return render(request, "store/success.html")
+    else:
+        return redirect("store:cart_view")

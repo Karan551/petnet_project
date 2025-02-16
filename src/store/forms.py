@@ -55,5 +55,7 @@ class OrderForm(forms.ModelForm):
         self.fields["address"].widget.attrs["placeholder"] = "Enter Full Address Here...."
         
 
+        # customize max length
+        self.fields["contact_number"].widget.attrs["maxlength"] = "10"
         for field in self.fields:
             self.fields[field].widget.attrs["class"] = CSS_CLASS

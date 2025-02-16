@@ -98,12 +98,18 @@ class Order(models.Model):
     address = models.CharField(max_length=300)
     paid_amount = models.DecimalField(max_digits=8, decimal_places=2)
     is_paid = models.BooleanField(default=False)
-    merchant_id = models.CharField(max_length=100)
+    payment_intent = models.CharField(max_length=100)
     created_by = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name="orders")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def get_display_price(self):
+        return self.price/100
+
+    def __str__(self):
+        return self.first_name+" "+self.last_name
 
 
 class OrderItems(models.Model):
@@ -114,6 +120,6 @@ class OrderItems(models.Model):
 
     price = models.DecimalField(decimal_places=2, max_digits=8)
     quantity = models.IntegerField(default=1)
-    
+
     class Meta:
-        verbose_name_plural="Order Items"
+        verbose_name_plural = "Order Items"

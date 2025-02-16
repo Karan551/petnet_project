@@ -15,16 +15,18 @@ urlpatterns = [
     path("product/delete-product/<int:product_id>",
          views.delete_product, name="delete_product"),
 
-    path("product/add-to-cart/<int:product_id>",
+    path("product/add-to-cart/<int:product_id>/",
          views.add_to_cart, name="add_to_cart"),
-    path("product/remove-to-cart/<int:product_id>",
+    path("product/remove-to-cart/<int:product_id>/",
          views.remove_to_cart, name="remove_to_cart"),
-    path("product/change-cart/<str:product_id>",
+    path("product/change-cart/<str:product_id>/",
          views.change_quantity, name="change_quantity"),
 
     path("product/cart-view/",
          views.cart_view, name="cart_view"),
 
-    path("product/checkout/", views.checkout, name="checkout")
+    path("product/checkout/", views.checkout, name="checkout"),
+    path("product/success/", views.success, name="success"),
+    
 
 ]
