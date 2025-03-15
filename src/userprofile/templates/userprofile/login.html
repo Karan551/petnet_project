@@ -1,19 +1,32 @@
-{% extends 'core/base.html' %} {% block title %}
+{% extends 'core/base.html' %} 
+{% block title %}
   Login
-{% endblock %} {% block content %}
+{% endblock %} 
+{% block content %}
   <section class="bg-gray-300 rounded-xl px-6 py-4 w-full md:w-1/2 mx-auto">
     <h1 class="mb-5 text-xl md:text-3xl font-semibold text-center">Login Form</h1>
+
+    {% if form.errors or form.non_field_errors %}
+    <div class="mb-3 rounded-xl bg-red-500 p-6 font-semibold text-lg text-black error-msg" id="error-msg">
+      
+      {% for field in form %}
+        {{ field.errors|title }}
+      {% endfor %}
+
+      {{ form.non_field_errors }}
+    </div>
+  {% endif %}
+
     <form method="post">
-      {% csrf_token %} {% if form.errors %}
-        <div class="mb-3 rounded-xl bg-red-500 p-6 font-semibold text-lg text-white error-msg" id="error-msg">
-          {% for field in form %}
-            {{ field.errors|title }}
-          {% endfor %} {{ form.non_field_errors }}
-        </div>
-      {% endif %} {% for field in form %}
+      {% csrf_token %} 
+
+      
+      
+      {% for field in form %}
         <label for="{{ field.auto_id }}" class="text-lg md:text-xl mb-2 inline-block after:content-['*'] after:text-red-500 after:ml-1">{{ field.label }}</label>
         {{ field }}
       {% endfor %}
+
       <div class="grid grid-cols-12 w-full mt-4">
         <button class="col-span-12 px-6 py-3 font-semibold text-lg md:text-2xl rounded-xl bg-teal-500 hover:bg-teal-700 text-white mt-2" type="submit">Login</button>
       </div>

@@ -5,13 +5,12 @@ from django.contrib.auth import login, logout, authenticate
 from .models import UserProfile
 from django.contrib.auth.models import User
 from store.models import Product
-from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
 from .utils import user_mail
 from .models import AuthStatus
 from django.utils import timezone
 from django.http import HttpResponseBadRequest
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import make_password
 
 # Create your views here.
 
@@ -20,7 +19,8 @@ def user_signup(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         # print("this is form errors", form.errors)
-
+        print("this is form.valid",form.is_valid())
+        print("this is form.errors",form.errors)
         if form.is_valid():
             user = form.save()
             print("this is user::", user)
@@ -41,20 +41,27 @@ def user_signup(request):
 
 def user_login(request):
     if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
+    
+        form=LoginForm(data=request.POST)
+        
+        if form.is_valid():
+            username = request.POST["username"]
+            password = request.POST["password"]
+            
+            
+            user = authenticate(request, username=username, password=password)
+            
+            if user is not None:
+                login(request, user)
+                messages.success(request, "Login Successfully.")
+                # redirect user
+    
+                return redirect("core:home")
+            else:
+                messages.error(request,"Invalid credentials. Please try again.")
 
-        # print("this is username::",username,password)
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-
-            # print("this is user::",user)
-            messages.success(request, "Login Successfully.")
-            # redirect user
-            # TODO: change hardcoded value
-            return redirect("/")
+        else:
+            messages.error(request,"Something went wrong.")
 
     form = LoginForm()
     context = {
@@ -67,11 +74,7 @@ def user_logout(request):
     if request.method == "POST":
         logout(request)
         messages.success(request, "Logout Successfully.")
-        # TODO: change into relative name
-        return redirect("/")
-
-
-# DONE:
+        return redirect("core:home")
 
 
 def user_reset_password(request):
@@ -84,8 +87,6 @@ def user_reset_password(request):
             reg_user = User.objects.filter(email=email).first()
         except User.DoesNotExist:
             error_message = "User not found with this email."
-
-     
 
         if email and reg_user:
             # 1. to store token in db  and expiry time

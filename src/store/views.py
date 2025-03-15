@@ -184,7 +184,11 @@ def checkout(request):
             items["payment_intent"] = checkout_session.payment_intent
 
             # TODO: come again
-            request.session["purchase_id"] = json.dumps(checkout_session.id)
+            print()
+            # request.session["purchase_id"] = json.dumps(checkout_session.id)
+            
+            request.session["purchase_id"] = checkout_session.id
+            print('this is session::',request.session.__dict__)
             print('this is sesssion:',request.session)
             if request.session["purchase_id"]:
                 order = form.save(commit=False)
