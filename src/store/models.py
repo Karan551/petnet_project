@@ -98,7 +98,7 @@ class Order(models.Model):
     address = models.CharField(max_length=300)
     paid_amount = models.DecimalField(max_digits=8, decimal_places=2)
     is_paid = models.BooleanField(default=False)
-    payment_intent = models.CharField(max_length=100)
+    payment_intent = models.CharField(max_length=300)
     created_by = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name="orders")
 
@@ -123,3 +123,16 @@ class OrderItems(models.Model):
 
     class Meta:
         verbose_name_plural = "Order Items"
+        
+    def __str__(self):
+        return self.product.name
+
+
+class Puchase(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    product = models.ManyToManyField(Product)
+    stripe_checkout_session_id=models.CharField(max_length=255,null=True,blank=True)
+    completed = models.BooleanField(default=False)
+    stripe_price = models.IntegerField(default=0)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    

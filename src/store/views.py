@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from store.models import Product, Category, OrderItems, Order
+from store.models import Product, Category, OrderItems, Order, Puchase
 from django.db.models import Q
 from .forms import ProductForm, OrderForm
 from django.utils.text import slugify
@@ -169,12 +169,13 @@ def checkout(request):
 
             items = {}
             products = []
+
             for item in cart:
                 product = item["product"]
 
                 products.append({
-                    "product_name": product.name,
-                    "price": item["quantity"]*product.price,
+                    "product_name": product["name"],
+                    "price": product["price"],
                     "quantity": item["quantity"]
                 })
 
@@ -183,63 +184,50 @@ def checkout(request):
             items["checkout_url"] = checkout_session.url
             items["payment_intent"] = checkout_session.payment_intent
 
-            # TODO: come again
-            print()
-            # request.session["purchase_id"] = json.dumps(checkout_session.id)
-            
             request.session["purchase_id"] = checkout_session.id
-            print('this is session::',request.session.__dict__)
-            print('this is sesssion:',request.session)
+
             if request.session["purchase_id"]:
                 order = form.save(commit=False)
                 order.created_by = request.user
                 order.paid_amount = cart.get_total_cost()
-                # order.is_paid = True
-                order.payment_intent = items["payment_intent"] or checkout_session.id
-                
+
+                order.payment_intent = str(
+                    items["payment_intent"]) or checkout_session.id
+
                 order.save()
 
-         
-                # del request.session["purchase_id"]
                 for item in cart:
-                    product = item["product"]
+                    product = Product.objects.get(id=item["product"]["id"])
                     quantity = item["quantity"]
-                    total_price = quantity * product.price
+                    total_price = quantity * item["product"]["price"]
 
                     item = OrderItems.objects.create(
                         product=product, order=order, price=total_price, quantity=quantity)
 
-                    # cart.clear()
-
-                    # messages.success(request, "Order Placed Successfully.")
-        # return redirect("userprofile:my_account")
-        # return JsonResponse({"msg": "hello"})
-        # session, payment_intent = items
-        # url = items["checkout_url"]
-            return HttpResponseRedirect(checkout_session.url)
-        # return JsonResponse({"session": session, "order": payment_intent})
+                return HttpResponseRedirect(checkout_session.url)
 
     form = OrderForm()
     context = {
-        "form": form,
-        "pub_key": settings.STRIPE_PUB_KEY
+        "form": form
     }
     return render(request, "store/checkout.html", context)
 
+
 @login_required
 def success(request):
-    cart=Cart(request)
+    cart = Cart(request)
     purchase_id = request.session.get("purchase_id")
-    print('this is id ',request.session['purchase_id'])
-    print('this is request.session',request.session.__dict__)
-    print("this is purchase id::",purchase_id)
+    print('this is id ', request.session['purchase_id'])
+    print('this is request.session', request.session.__dict__)
+    print("this is purchase id::", purchase_id)
     order = Order.objects.get(payment_intent=purchase_id)
+    print("this is order::", order)
     if purchase_id:
         order.is_paid = True
         order.save()
         messages.success(request, "Order Placed Successfully.")
         del request.session["purchase_id"]
-        # cart.clear()
+        cart.clear()
         return render(request, "store/success.html")
     else:
         return redirect("store:cart_view")

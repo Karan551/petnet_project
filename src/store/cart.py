@@ -15,18 +15,28 @@ class Cart:
         self.qty = 0
 
     def __iter__(self):
-        print('this is self.cart',self.cart)
+        print('this is self.cart', self.cart)
         # To add product id and product information in cart
         for key in self.cart.keys():
-            print('this is key::', key)
-            self.cart[key]["product"] = Product.objects.get(id=key)
+            
+            product = Product.objects.get(id=key)
+            self.cart[key]["product"] = {
+                'id': product.id,
+                'name': product.name,
+                'price': product.get_display_price(),
+            }
 
+        # print("here is session in cart: \n", self.session.__dict__)
+        # print("this is cart ", self.cart)
+        # print("here is session in cart------ \n", self.session.__dict__)
         # {'5': {'id': 5, 'quantity': 1, 'product': <Product: Apple Iphone>}}
 
         # To add product total price
         for item in self.cart.values():
+            # print("this is item in cart:",item)
+            # print('this is price',item["product"]["price"])
             item["total_price"] = int(
-                item["product"].price * item["quantity"])/100
+                item["product"]["price"] * item["quantity"])
 
             yield item
 
@@ -52,7 +62,7 @@ class Cart:
 
             if self.cart[product_id]["quantity"] == 0:
                 self.remove(product_id)
-        
+
         self.save()
 
     def remove(self, product_id):
