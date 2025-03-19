@@ -7,11 +7,10 @@ from django.utils.text import slugify
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .cart import Cart
-from django.http import JsonResponse, HttpResponseRedirect
-from django.conf import settings
-import stripe
-import json
+from django.http import HttpResponseRedirect
+
 from .utils import product_sales
+
 # Create your views here.
 
 
@@ -26,8 +25,6 @@ def product_search(request):
             "query": query
         }
         return render(request, "store/search.html", context)
-
-# TODO: show product items number in templates
 
 
 def category_detail(request, category_id):
@@ -156,7 +153,6 @@ def change_quantity(request, product_id):
 def checkout(request):
 
     cart = Cart(request)
-    print('this is cart length::', len(cart))
 
     if len(cart) == 0:
         return redirect("store:cart_view")
@@ -164,7 +160,6 @@ def checkout(request):
     if request.method == "POST":
         form = OrderForm(request.POST)
 
-        # TODO: fix payment intent issue
         if form.is_valid():
 
             items = {}
@@ -183,7 +178,7 @@ def checkout(request):
 
             items["checkout_url"] = checkout_session.url
             items["payment_intent"] = checkout_session.payment_intent
-
+           
             request.session["purchase_id"] = checkout_session.id
 
             if request.session["purchase_id"]:
@@ -191,8 +186,7 @@ def checkout(request):
                 order.created_by = request.user
                 order.paid_amount = cart.get_total_cost()
 
-                order.payment_intent = str(
-                    items["payment_intent"]) or checkout_session.id
+                order.payment_intent = items["payment_intent"] or checkout_session.id
 
                 order.save()
 
@@ -217,11 +211,8 @@ def checkout(request):
 def success(request):
     cart = Cart(request)
     purchase_id = request.session.get("purchase_id")
-    print('this is id ', request.session['purchase_id'])
-    print('this is request.session', request.session.__dict__)
-    print("this is purchase id::", purchase_id)
+    
     order = Order.objects.get(payment_intent=purchase_id)
-    print("this is order::", order)
     if purchase_id:
         order.is_paid = True
         order.save()

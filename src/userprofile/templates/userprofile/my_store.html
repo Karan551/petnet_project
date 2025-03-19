@@ -1,26 +1,53 @@
 {% extends 'core/base.html' %}
+ {% block title %}
+  My Store
+{% endblock %}
+ {% block content %}
+  <section class="bg-slate-100 px-8 py-4 rounded-xl w-full mx-auto">
+    <h1 class="text-3xl leading-none text-center mb-4">My Store</h1>
+    {% if order_items %}
+    <h2 class="text-3xl mb-5">My Orders</h2>
 
-  {% block title %}My Store {% endblock %}
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg ">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+        <thead class="text-xs text-white uppercase bg-orange-500 ">
+          <tr>
+            <th scope="col" class="text-lg px-6 py-3">Order ID</th>
+            <th scope="col" class="text-lg px-6 py-3">Product name</th>
 
-{% block content %}
-<section class="bg-slate-100 px-8 py-4 rounded-xl w-4/5 mx-auto">
+            <th scope="col" class="text-lg px-6 py-3">Quantity</th>
+            <th scope="col" class="text-lg px-6 py-3">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order_item in order_items %}
+          <tr class="odd:bg-gray-300 even:bg-white border-b  border-gray-800 text-gray-900">
 
+            <th scope="row" class="px-6 py-4 font-medium  text-lg whitespace-nowrap ">
 
-<div class="w-full  mb-6 relative">
-    <h1 class="text-3xl leading-none text-center">
-        My Store
-    </h1>
+              <a href="{% url 'userprofile:my_store_order_detail' order_item.order.id %}" class="hover:underline text-blue-500 hover:text-blue-700" >{{order_item.order.id}}</a>
+            </th>
+            <td class="px-6 py-4 text-lg">{{order_item.product.name}}</td>
+            <td class="px-6 py-4 text-lg">{{order_item.quantity}}</td>
+            <td class="px-6 py-4 text-lg">{{order_item.price}} $</td>
 
-    <a href="{% url 'store:add_product' %}" class="inline-block py-4 px-8 bg-teal-500 text-white rounded-xl font-semibold text-lg md:text-xl hover:bg-teal-700 absolute h -top-1 right-4">Add Product</a>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
 
+    <hr />
+    {% if products %}
+      <div class="my-4">
+        <h2 class="text-xl md:text-2xl leading-none my-3">My Products</h2>
+        <a href="{% url 'store:add_product' %}" class="inline-block py-4 px-8 bg-teal-500 text-white rounded-xl font-semibold text-lg md:text-xl hover:bg-teal-700 mt-4">Add Product</a>
 
-
-</div>
-{% if products %}
-    
-{% include "store/product.html" %}
-{% else %}
-<p class="mt-4 py-4 px-8 bg-gray-200">You don't have any products yet...</p>
-{% endif %}
-</section>
-{% endblock content %}
+        {% include 'store/product.html' %}
+      </div>
+    {% else %}
+      <p class="mt-4 py-4 px-8 bg-gray-200">You don't have any products yet...</p>
+    {% endif %}
+  </section>
+{% endblock %}

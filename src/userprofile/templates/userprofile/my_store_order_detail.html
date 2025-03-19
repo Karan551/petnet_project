@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+ {% block title %}
+  Order Detail - {{order.id}}
+{% endblock %}
+ {% block content %}
+ 
+ <section class="bg-slate-100 px-8 py-4 rounded-xl w-full mx-auto">
+  <h1 class="mb-6 text-2xl">Order ID - #{{ order.id }}</h1>
+  {% if is_vendor  %}
+  <div class="flex flex-col md:flex-row  space-x-4 mb-4" >
+  <p class="text-lg font-semibold " >Total Price :- <span class="text-orange-500" >{{total_price}} &dollar;</span></p>
+
+ <a href="{% url 'userprofile:my_store' %}" class="inline-block text-blue-500 hover:text-blue-700 px-6  rounded-xl font-semibold text-lg hover:underline">Back To Store</a>
+</div>
+  {% endif %}
+  <h2 class="mb-3 text-xl">My products in this order.</h2>
+  
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg ">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+      <thead class="text-xs uppercase text-white bg-orange-400 ">
+        <tr>
+        
+          <th scope="col" class="text-lg px-6 py-3">Title</th>
+
+          <th scope="col" class="text-lg px-6 py-3">Quantity</th>
+          <th scope="col" class="text-lg px-6 py-3">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+       
+        {% for order_item in order.orders.all %}
+        {% if order_item.product.vendor == request.user  %}
+        <tr class="odd:bg-gray-300 even:bg-white border-b  border-gray-800 text-gray-900">
+
+        
+          <td class="px-6 py-4 text-lg">{{order_item.product.name}}</td>
+          <td class="px-6 py-4 text-lg">{{order_item.quantity}}</td>
+          <td class="px-6 py-4 text-lg">{{order_item.price}} $</td>
+
+        </tr>
+
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+ </section>
+ {% endblock content %}
