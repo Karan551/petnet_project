@@ -1,0 +1,59 @@
+Steps :-
+
+    1. ✅ Create virtual env
+    2. ✅ Install django and initialize project
+    3. ✅ Install tailwind css
+    4. ✅ Finish tailwind css configuration
+    5. ✅ Create core app and register this app.
+            - ✅ Create base.html and to show common template
+            - ✅ Create index.html and show products.
+            - ✅ Show products on front page.
+    6. ✅ Create userprofile app and register this app
+    7. ✅ Create store app and register this app.
+    8. ✅ Create search view and show items
+    9. ✅ Create Cart
+    10.✅ Add Cart items
+          ✅ -  Make it possible to increment/decrement products in the cart
+    11.✅ Remove Cart items
+    12.✅ Cart view
+    13.✅ Create Order Table or model
+    14.✅ Create OrderItem model
+    15.✅ Only authenticated User create to checkout
+    16.   Vendors must be able to see their orders
+    17.   Vendors must be able to see what they have earned
+    18.   Add Payment Gateway
+    19.   Deploy 
+
+
+
+
+🌟 Core  App :-
+    1. ✅ Home Page view
+    2. ✅ About Page view
+
+🌟 UserProfile  App :-
+    1. ✅ Signup view
+    2. ✅ Login view
+    3. ✅ Logout view
+    4. ✅ Forgot Password View
+    5. ✅ Vendor detail view
+    6. ✅ My Account view
+
+🌟 Store  App :-
+    1. ✅ Create Category model
+    2. ✅ Create Product model
+    3. ✅ Create product detail view
+    4. ✅ Create category detail view
+    5. ✅ Create search view
+    6. ✅ Add Product view
+    7. ✅ Edit Product view
+    8. ✅ Delete Product(Soft Delete) view
+    9. ✅ Create change cart items view
+    10.✅ Create Checkout view
+
+
+---------------------------------------
+🌟 Important New Concepts 
+
+1. Context Processor
+2. Custom Template Tags
