@@ -44,7 +44,7 @@
 ![Forgot Password](./screenshots/Reset_Password_page_Petnet.png)
 
 ### 🛍️ Product List Page
-![Product List](screenshots/products.png)
+![Product List](./screenshots/Product_Page_Petnet.png)
 
 ### ➕ Add Product Page
 ![Add Product](./screenshots/Add_Product_page_Petnet.png)
