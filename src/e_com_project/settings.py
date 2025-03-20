@@ -137,8 +137,8 @@ USE_TZ = True
 LOGIN_URL = "userprofile:login"
 
 # using session
-CART_SESSION_ID = "my_cart"
-SESSION_COOKIE_AGE = 86400
+CART_SESSION_ID = config("CART_SESSION_ID", cast=str)
+SESSION_COOKIE_AGE = config("SESSION_COOKIE_AGE", cast=int)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
